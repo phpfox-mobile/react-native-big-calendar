@@ -2,9 +2,12 @@
   "name": "react-native-big-calendar",
   "version": "3.2.3",
   "main": "src/index.ts",
-  "repository": "git@github.com:acro5piano/react-native-big-calendar",
   "author": "gosho-kazuya <ketsume0211@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/phpfox-mobile/react-native-big-calendar"
+  },
   "scripts": {
     "prepare": "simple-git-hooks || true",
     "storybook": "start-storybook -p 7007",

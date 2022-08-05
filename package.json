@@ -26,8 +26,10 @@
     "build:ts": "env NODE_ENV=production rollup -c"
   },
   "dependencies": {
+    "calendar-base": "^1.2.0",
     "calendarize": "^1.1.1",
     "dayjs": "^1.10.7",
+    "dayjs-plugin-utc": "^0.1.2",
     "merge-anything": "4.0.2"
   },
   "peerDependencies": {

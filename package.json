@@ -1,6 +1,6 @@
 {
   "name": "react-native-big-calendar",
-  "version": "3.2.3",
+  "version": "3.2.4",
   "main": "src/index.ts",
   "author": "gosho-kazuya <ketsume0211@gmail.com>",
   "license": "MIT",
@@ -8,6 +8,9 @@
     "type": "git",
     "url": "https://github.com/phpfox-mobile/react-native-big-calendar"
   },
+  "files": [
+    "src/"
+  ],
   "scripts": {
     "prepare": "simple-git-hooks || true",
     "storybook": "start-storybook -p 7007",

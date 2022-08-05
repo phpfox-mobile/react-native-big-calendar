@@ -1,10 +1,7 @@
 {
   "name": "react-native-big-calendar",
   "version": "3.2.3",
-  "main": "build/index.js",
-  "jsnext:main": "build/index.es.js",
-  "module": "build/index.es.js",
-  "types": "build/index.d.ts",
+  "main": "src/index.js",
   "repository": "git@github.com:acro5piano/react-native-big-calendar",
   "author": "gosho-kazuya <ketsume0211@gmail.com>",
   "license": "MIT",

@@ -310,7 +310,7 @@ export const getCalendarDayObject = (
   isFormat?: boolean,
 ): ObjectDataBase<number | string> => {
   const dateArray = date.format('YYYY-MM-DD').split('-')
-  // !isFormat && console.log('dateArray', date.toString(), date, dateArray)
+  // !isFormat && console.log('dateArray', date.toString(), dateArray)
   return {
     year: isFormat ? Number(dateArray[0]) : dateArray[0],
     month: isFormat ? Number(dateArray[1]) : dateArray[1],

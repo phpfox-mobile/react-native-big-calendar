@@ -84,6 +84,7 @@ function _CalendarBodyForMonthView<T extends ICalendarEventBase>({
     onSwipeHorizontal,
   })
 
+  // console.log("data", targetDate.toDate())
   const weeks = showAdjacentMonths
     ? getWeeksWithAdjacentMonths(targetDate, weekStartsOn)
     : calendarize(targetDate.toDate(), weekStartsOn)
@@ -127,13 +128,15 @@ function _CalendarBodyForMonthView<T extends ICalendarEventBase>({
               }
               return a.start.getTime() - b.start.getTime()
             })
-        : events.filter(({ start, end }) => {
+        : events.filter(({ start, end, title }) => {
             const _start = getCalendarDayObject(start, true)
             const _end = getCalendarDayObject(end, true)
             const _date = getCalendarDayObject(day, true)
-            return dayjs(_date.toString, 'DD-MM-YYYY').isBetween(
-              dayjs(_start.toString, 'DD-MM-YYYY').startOf('day'),
-              dayjs(_end.toString, 'DD-MM-YYYY').endOf('day'),
+
+            // console.log("calendar-----",_date.toString, _start.toString, _end.toString, start, end, title )
+            return dayjs(_date.toString, 'YYYY-MM-DD').isBetween(
+              dayjs(_start.toString, 'YYYY-MM-DD').startOf('day'),
+              dayjs(_end.toString, 'YYYY-MM-DD').endOf('day'),
               null,
               '[)',
             )
@@ -144,13 +147,15 @@ function _CalendarBodyForMonthView<T extends ICalendarEventBase>({
   //new
   const getCalendarDays = React.useCallback(() => {
     //
-    return calendar
-      .getCalendar(nProps.year, nProps.month)
-      .map((day) => {
-        let _day = { ...day, eventSlots: Array(maxVisibleEventCount - 1).fill(false) }
-        return _day
-      })
-      .filter((item) => item.month && item.month >= nProps.month)
+    // console.log("getCalendar(nProps.year, nProps.month)",calendar.getCalendar(nProps.year, nProps.month-1))
+    return calendar.getCalendar(nProps.year, nProps.month - 1).map((day) => {
+      let _day = {
+        ...day,
+        eventSlots: Array(maxVisibleEventCount - 1).fill(false),
+        month: day.month + 1,
+      }
+      return _day
+    })
   }, [calendar, maxVisibleEventCount, nProps.month, nProps.year])
 
   const getEventMeta = React.useCallback(
@@ -161,14 +166,16 @@ function _CalendarBodyForMonthView<T extends ICalendarEventBase>({
       const firstDayOfMonth = days[0]
       const lastDayOfMonth = days[days.length - 1]
 
+      let indexFirst = days.findIndex(
+        (item) => item.day == eventStart.day && item.month == eventStart.month,
+      )
+
       const eventMeta = {
         // Asserts Event is visible in this month view
         isVisibleInView: false,
         visibleEventLength: days.length,
         // Returns the index (interval from first visible day) of [...days] of event's first "visible" day
-        firstVisibleDayIndex: eventStartInView
-          ? Calendar.interval(firstDayOfMonth, eventStart) - 1
-          : 0,
+        firstVisibleDayIndex: eventStartInView ? indexFirst : 0,
       }
 
       // Asserts Event is visible in this month view
@@ -198,6 +205,8 @@ function _CalendarBodyForMonthView<T extends ICalendarEventBase>({
     return events.sort((a, b) => {
       const eventA = getCalendarDayObject(a.start)
       const eventB = getCalendarDayObject(b.start)
+      if (eventA.year < eventB.year) return eventA.year - eventB.year
+      if (eventA.month < eventB.month) return eventA.month - eventB.month
       return eventA.day - eventB.day
     })
   }
@@ -207,18 +216,20 @@ function _CalendarBodyForMonthView<T extends ICalendarEventBase>({
     if (!days) {
       return
     }
+    // console.log("dats",days)
     // Set Range Limits on calendar
     calendar.setStartDate(days[0])
     calendar.setEndDate(days[days.length - 1])
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     events = sortEvents(events)
+    // console.log("date------", days, events)
     // Iterate over each of the supplied events
     events.forEach((eventItem) => {
       const eventStart = getCalendarDayObject(eventItem.start)
       const eventEnd = getCalendarDayObject(eventItem.end)
       const eventMeta = getEventMeta(days, eventStart, eventEnd)
-      // console.log('eventStart-----', eventMeta, eventStart, eventItem.title)
+      // console.log('eventStart----- eeeeee', eventMeta, eventStart,eventEnd, eventItem.title)
       if (eventMeta.isVisibleInView) {
         const eventLength = eventMeta.visibleEventLength
         const eventSlotIndex = days[eventMeta.firstVisibleDayIndex]?.eventSlots.indexOf(false)
@@ -239,7 +250,7 @@ function _CalendarBodyForMonthView<T extends ICalendarEventBase>({
             eventData.isLastDay = true
           }
 
-          if (!eventData.isFirstDay || !eventData.isLastDay) {
+          if (!eventData.isFirstDay && !eventData.isLastDay) {
             // Flag between day of event
             eventData.isBetweenDay = true
           }
@@ -255,7 +266,11 @@ function _CalendarBodyForMonthView<T extends ICalendarEventBase>({
             days[eventMeta.firstVisibleDayIndex + dayIndex].eventSlots[eventSlotIndex] = eventData
           }
           // Move to next day of event
-          dayIndex++
+          dayIndex = dayIndex + 1
+          // console.log(
+          //   'eventStart-----dayIndex',
+          //   dayIndex
+          // )
         }
       }
     })
@@ -271,9 +286,11 @@ function _CalendarBodyForMonthView<T extends ICalendarEventBase>({
   React.useEffect(() => {
     getdata()
   }, [getdata])
-
+  //
+  // console.log('eveent day----',state)
   const renderEventContent = (date, ii) => {
     const events = sortedEvents(date)
+    // console.log('eveent day----',date,events)
 
     const _date = getCalendarDayObject(date)
 
@@ -286,13 +303,14 @@ function _CalendarBodyForMonthView<T extends ICalendarEventBase>({
     const slot = eventSorted?.filter((it) => it).length
     const text_more = events.length - slot
 
-    // console.log('eveent day----', Number(date.format('DD')), eventSorted, events)
+    // console.log('eveent day----', Number(date.format('DD')), state)
     return eventSorted?.reduce((elements, _, index) => {
       const elementViews = [
         ...elements,
         index > maxVisibleEventCount ? null : !eventSorted[index] ? null : (
           <CalendarEventForMonthView
-            key={index}
+            // key={date.format('YYYY-MM-DD')}
+            // key={index}
             event={eventSorted[index]}
             eventCellStyle={eventCellStyle}
             onPressEvent={onPressEvent}

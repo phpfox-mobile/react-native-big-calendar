@@ -337,7 +337,7 @@ function _CalendarBodyForMonthView<T extends ICalendarEventBase>({
         style,
       ]}
       onLayout={({ nativeEvent: { layout } }) => setCalendarWidth(layout.width)}
-      {...panResponder.panHandlers}
+      // {...panResponder.panHandlers}
     >
       {weeks.map((week, i) => (
         <View

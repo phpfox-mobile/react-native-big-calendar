@@ -309,8 +309,7 @@ function _CalendarBodyForMonthView<T extends ICalendarEventBase>({
         ...elements,
         index > maxVisibleEventCount ? null : !eventSorted[index] ? null : (
           <CalendarEventForMonthView
-            // key={date.format('YYYY-MM-DD')}
-            // key={index}
+            key={index}
             event={eventSorted[index]}
             eventCellStyle={eventCellStyle}
             onPressEvent={onPressEvent}
@@ -328,7 +327,7 @@ function _CalendarBodyForMonthView<T extends ICalendarEventBase>({
       if (index === eventSorted.length - 1 && text_more) {
         elementViews?.push(
           <Text
-            key={index}
+            key={index + 1}
             style={[theme.typography.moreLabel, { marginTop: 2, color: theme.palette.moreLabel }]}
           >
             {moreLabel.replace('{moreCount}', `${text_more}`)}

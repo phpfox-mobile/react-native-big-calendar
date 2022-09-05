@@ -227,7 +227,8 @@ function _CalendarBodyForMonthView<T extends ICalendarEventBase>({
     let max = 0
     data.map((item) => {
       const slot = [...item.eventSlots]
-      const index = slot.length - slot?.reverse().findIndex((item) => item !== false) ?? 0
+      const slotEnd = slot?.reverse().findIndex((item) => item !== false)
+      const index = slotEnd === -1 ? 0 : slot.length - slotEnd
       if (index > max) {
         max = index
       }
@@ -259,9 +260,9 @@ function _CalendarBodyForMonthView<T extends ICalendarEventBase>({
         style={[
           {
             borderWidth: 1,
-            borderColor: item.data.border_color,
+            borderColor: item.border_color,
             borderRadius: 2,
-            backgroundColor: item.data.background_color,
+            backgroundColor: item.background_color,
             marginTop: 2,
             height: eventMinHeightForMonthView,
           },
@@ -320,7 +321,7 @@ function _CalendarBodyForMonthView<T extends ICalendarEventBase>({
             }}
             numberOfLines={1}
           >
-            {event.data?.name}
+            {event?.name}
           </Text>
         ) : null}
       </TouchableOpacity>

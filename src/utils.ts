@@ -310,7 +310,7 @@ export const getCalendarDayObject = (
   isFormat?: boolean,
 ): ObjectDataBase<number | string> => {
   const dateArray = date.format('YYYY-MM-DD').split('-')
-  // !isFormat && console.log('dateArray', date.toString(), dateArray)
+  // console.log('dateArray', date.toString(), date, dateArray)
   return {
     year: isFormat ? Number(dateArray[0]) : dateArray[0],
     month: isFormat ? Number(dateArray[1]) : dateArray[1],
@@ -333,7 +333,14 @@ export const checkBetweenDay = (date: dayjs.Dayjs, start: dayjs.Dayjs, end: dayj
   const _start = getCalendarDayObject(start, true)
   const _end = getCalendarDayObject(end, true)
   const _date = getCalendarDayObject(date, true)
-  // console.log(date, _start, _end, _date)
+  console.log(
+    '123123----------',
+    date,
+    _start,
+    _end,
+    _date,
+    dayjs('2022-10-03').tz('America/Toronto'),
+  )
 
   if (
     _start.year > _date.year ||

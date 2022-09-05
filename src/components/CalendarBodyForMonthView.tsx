@@ -321,7 +321,7 @@ function _CalendarBodyForMonthView<T extends ICalendarEventBase>({
             }}
             numberOfLines={1}
           >
-            {event?.name}
+            {event?.title}
           </Text>
         ) : null}
       </TouchableOpacity>
@@ -337,7 +337,7 @@ function _CalendarBodyForMonthView<T extends ICalendarEventBase>({
           { borderColor: theme.palette.gray['200'] },
           {
             minHeight: minCellHeight,
-            borderWidth: 2,
+            borderWidth: 1,
             width: (calendarWidth - 0) / 7,
             flexDirection: 'column',
           },
